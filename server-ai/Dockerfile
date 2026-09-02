@@ -16,4 +16,6 @@ RUN grep -Ev "^opencv-python" /app/kb-extract-rig/requirements.txt > /tmp/kb-req
 COPY kb-extract-rig/ /app/kb-extract-rig/
 COPY server-ai/ /app/server-ai/
 EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Shell form (not exec-array) so $PORT expands — hosts like Render assign
+# their own port at runtime instead of always using the EXPOSEd default.
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}

@@ -1,0 +1,66 @@
+# Render Blueprint for a standalone demo deploy of AWIP.
+# Each service gets its own onrender.com subdomain (unlike docker-compose.prod.yml,
+# which serves everything under one origin via nginx path-based proxying at /awip/).
+# The app already uses bearer-token auth (no cookies), so this cross-origin
+# setup needs no CORS/auth code changes.
+#
+# Deploy: Render dashboard -> New -> Blueprint -> select this repo.
+# You'll be prompted for every env var marked sync: false below.
+# IMPORTANT: paste the SAME DATABASE_URL into both awip-core-api and awip-ai-api,
+# and the SAME JWT_SECRET into both -- server-ai verifies JWTs that server-core issues.
+#
+# If Render has to rename a service below (name already taken on the shared
+# onrender.com namespace), update the VITE_CORE_API_URL / VITE_AI_API_URL /
+# AI_API_URL values to match the actual assigned hostname and redeploy.
+
+services:
+  - name: awip-core-api
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./server-core/Dockerfile
+    dockerContext: ./server-core
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: AI_API_URL
+        value: https://awip-ai-api.onrender.com
+
+  - name: awip-ai-api
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./server-ai/Dockerfile
+    # Repo-root context: main.py imports the sibling kb-extract-rig/ directory.
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ZAI_API_KEY
+        sync: false
+      - key: ZAI_MODEL
+        value: glm-4.7-flash
+
+  - name: awip-web
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: VITE_BASE_PATH
+        value: /
+      - key: VITE_CORE_API_URL
+        value: https://awip-core-api.onrender.com
+      - key: VITE_AI_API_URL
+        value: https://awip-ai-api.onrender.com
