@@ -1,0 +1,28 @@
+# KB Extract Rig - GPU server. Non-Chinese stack only.
+# torch is assumed already installed with CUDA (yours: torch 2.10.0+cu128 on RTX 5090).
+# Do NOT reinstall torch here - it would replace your working cu128 build.
+
+# PDF text + page rendering (one lib does both)
+pymupdf
+
+# GPU OCR (sovereign: docTR = Mindee / France) - install with --no-deps if torch is precious:
+#   pip install python-doctr --no-deps
+#   pip install onnx pyclipper validators pypdfium2 langdetect huggingface-hub defusedxml anyascii tqdm shapely h5py
+python-doctr
+
+# CPU 2nd OCR engine for voting (needs system Tesseract 5 + eng/hin/mar lang packs)
+pytesseract
+
+# preprocessing + voting + office files
+opencv-python
+scikit-image
+rapidfuzz
+openpyxl
+xlrd            # legacy .xls reading (xlrd 2.x reads .xls; required for the .xls path)
+img2table       # scanned-table OCR fallback in table_pdf.py
+PyYAML          # optional config.yaml support (graceful if absent)
+python-docx
+Pillow
+numpy
+
+# BANNED (sovereignty - do not add): paddleocr, paddlepaddle, qwen-vl, got-ocr, bge, transformers-qwen

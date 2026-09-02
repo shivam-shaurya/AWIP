@@ -1,0 +1,35 @@
+/* Same containment fix used for the earlier Ahmedabad zone map this session
+   — Leaflet's own panes/controls ship with z-index up to 1000, which floats
+   above `position: fixed` app chrome (the Heera assistant button) unless
+   scoped into a low, contained stacking context. */
+.ward-map-stack {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+
+.ward-map-stack .leaflet-popup-content-wrapper {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.16);
+}
+.ward-map-stack .leaflet-popup-content { margin: 10px 12px; }
+.ward-map-stack .leaflet-popup-tip { background: var(--popover); border: 1px solid var(--border); }
+.ward-map-stack .leaflet-popup-close-button { color: var(--popover-foreground) !important; opacity: 0.6; }
+.ward-map-stack .leaflet-popup-close-button:hover { opacity: 1; }
+
+.ward-map-stack .leaflet-tooltip {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  font-weight: 500;
+}
+.ward-map-stack .leaflet-tooltip-top:before { border-top-color: var(--border); }
+
+.ward-map-stack .leaflet-interactive { transition: filter 0.18s ease-out; }
+.ward-map-stack .ward-marker-core { filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)); }
+.ward-map-stack .ward-marker-core:hover { filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.4)); }

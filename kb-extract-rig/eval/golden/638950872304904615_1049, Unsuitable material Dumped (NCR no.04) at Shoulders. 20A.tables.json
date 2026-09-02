@@ -1,0 +1,11 @@
+{
+  "type": "scanned",
+  "source": "638950872304904615_1049, Unsuitable material Dumped (NCR no.04) at Shoulders. 20A.pdf",
+  "verified": false,
+  "needs_human_transcription": true,
+  "authoritative_source": null,
+  "pages": 5,
+  "n_tables": 0,
+  "note": "Scanned PDF - NO text layer, so NO fitz cross-check is possible. No authoritative source Excel/native file for this NCR letter exists in samples/. Grids are intentionally NOT fabricated. To make this a real gold: either (a) point the rig at the source Excel and seed via excel_extract (the reconcile_tables path), or (b) have a human transcribe the table(s) here and set verified=true.",
+  "tables": []
+}

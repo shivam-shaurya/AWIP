@@ -1,0 +1,46 @@
+# AWIP (AI-HR / Workforce Intelligence Platform) — served under /awip/
+# Backends (loopback only, compose project `awip`):
+#   web (TanStack Start SSR)  127.0.0.1:8097
+#   server-core (Express API) 127.0.0.1:8098
+#   server-ai (FastAPI)       127.0.0.1:8099
+# Static assets are emitted by nitro at root (/assets/, /amc-logo.png, ...)
+# while the HTML references them under the /awip/ base, so the asset regex
+# strips the /awip/ prefix. Page routes keep the prefix (router basepath).
+
+location ~ ^/awip/(api/)?(docs|redoc|openapi\.json)$ { return 404; }
+
+location /awip/core-api/ {
+    rewrite ^/awip/core-api/(.*)$ /$1 break;
+    proxy_pass http://127.0.0.1:8098;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_buffering off;
+    client_max_body_size 25m;
+}
+
+location /awip/ai-api/ {
+    rewrite ^/awip/ai-api/(.*)$ /$1 break;
+    proxy_pass http://127.0.0.1:8099;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    client_max_body_size 25m;
+}
+
+location ~ ^/awip/(.+\.(?:js|mjs|css|map|png|jpe?g|svg|gif|ico|webp|avif|woff2?|ttf|eot|txt|xml))$ {
+    rewrite ^/awip/(.*)$ /$1 break;
+    proxy_pass http://127.0.0.1:8097;
+    proxy_set_header Host $host;
+    expires 7d;
+    add_header Cache-Control "public";
+}
+
+location = /awip { return 301 /awip/; }
+
+location /awip/ {
+    proxy_pass http://127.0.0.1:8097;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+}

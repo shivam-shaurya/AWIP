@@ -1,0 +1,899 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EmployeeStatus {
+  Active
+  OnLeave    @map("On Leave")
+  Suspended
+  Deputation
+}
+
+model Department {
+  id     String @id
+  name   String @unique
+  headId String?
+
+  employees Employee[]
+
+  @@map("departments")
+}
+
+model Employee {
+  id          String         @id
+  name        String
+  designation String
+  department  String
+  departmentId String?
+  departmentRef Department?  @relation(fields: [departmentId], references: [id])
+  cadre       String
+  doj         String
+  retirement  String
+  status      EmployeeStatus
+  posting     String
+  zone        String?
+  ward        String?
+
+  grade         String?
+  jobProfile    String?
+  actingRole    String?
+  divisionCode  String?
+  divisionName  String?
+  photo         String?
+
+  dob                     String?
+  gender                  String?
+  maritalStatus           String?
+  bloodGroup              String?
+  phone                   String?
+  personalEmail           String?
+  address                 String?
+  emergencyContactName    String?
+  emergencyContactRelation String?
+  emergencyContactPhone   String?
+
+  managerId     String?
+  manager       Employee?  @relation("ManagerReports", fields: [managerId], references: [id])
+  directReports Employee[] @relation("ManagerReports")
+
+  promotionDue      Boolean @default(false)
+  retirementDue     Boolean @default(false)
+  appraisalPending  Boolean @default(false)
+  trainingPending   Boolean @default(false)
+  missingDocs       Boolean @default(false)
+  disciplinaryFlag  Boolean @default(false)
+  disciplinaryNote  String?
+  isFlagship        Boolean @default(false)
+
+  // HR-set High-Potential override — tri-state: null = no override (effective
+  // flag is just the AI score), true = HR force-flagged someone the AI
+  // missed, false = HR force-removed someone the AI flagged. Lets HR go
+  // either direction instead of only adding to the AI's call.
+  hiPoOverride   Boolean?
+  hiPoOverrideBy String?
+  hiPoOverrideAt DateTime?
+
+  tasks             Task[]
+  serviceBookDocs   ServiceBookEntry[]
+  compensation      Compensation?
+  performanceRecords PerformanceRecord[]
+  trainingRecords    TrainingRecord[]
+  skills             EmployeeSkill[]
+  attendance         AttendanceSummary[]
+  assets             Asset[]
+  employeeEvents     EmployeeEvent[]
+  leaveBalances      LeaveBalance[]
+  leaveRequests      LeaveRequest[]
+  personalEvents     PersonalEvent[]
+  insurancePolicies  Insurance[]
+  linkedUsers        User[]
+  grievancesFiled    Grievance[]
+  privacyRequests    PrivacyRequest[]
+  statutoryCompliance StatutoryCompliance?
+  perks              Perk[]
+  educationRecords   EducationRecord[]
+  workExperience     WorkExperience[]
+  onboardingCase     OnboardingCase?  @relation("EmployeeOnboarding")
+  onboardingBuddyFor OnboardingCase[] @relation("OnboardingBuddy")
+
+  @@index([departmentId])
+  @@index([managerId])
+  @@map("employees")
+}
+
+model LeaveBalance {
+  id         Int      @id @default(autoincrement())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String
+  leaveType  String
+  year       Int
+  entitled   Int
+  availed    Int
+  balance    Int
+
+  @@unique([employeeId, leaveType, year])
+  @@index([employeeId])
+  @@map("leave_balances")
+}
+
+// Leave apply/approve workflow — LeaveBalance above stays the source of
+// truth for entitlement/balance; approving a request debits it.
+//
+// Two-stage approval: the employee's manager (snapshotted as managerId at
+// apply time, so a later reassignment doesn't retroactively change who
+// reviewed it) decides first via managerStatus; only once that's Approved
+// (or NotRequired, for employees with no manager) can HR finalize via the
+// top-level status field.
+model LeaveRequest {
+  id               String    @id
+  employee         Employee  @relation(fields: [employeeId], references: [id])
+  employeeId       String
+  leaveType        String
+  fromDate         String
+  toDate           String
+  days             Int
+  reason           String
+  status           String    @default("Pending") // Pending | Approved | Rejected
+  appliedAt        DateTime  @default(now())
+  decidedBy        String?
+  decidedAt        DateTime?
+  decisionNote     String?
+  managerId        String?
+  managerStatus    String    @default("Pending") // Pending | Approved | Rejected | NotRequired
+  managerDecidedAt DateTime?
+  managerNote      String?
+
+  @@index([employeeId])
+  @@map("leave_requests")
+}
+
+// A private, employee-owned calendar reminder (e.g. "Doctor appointment") —
+// merged into GET /api/v1/calendar/events alongside the auto-derived
+// org-wide events, but only ever visible to the employee who created it.
+model PersonalEvent {
+  id         Int      @id @default(autoincrement())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String
+  title      String
+  date       String
+  note       String?
+  createdAt  DateTime @default(now())
+
+  @@index([employeeId])
+  @@map("personal_events")
+}
+
+// High-Potential perks — the flag itself is AI/algorithm-computed at read
+// time (see computeEmployeeInsights in server.js), not stored; only the
+// perks/tasks granted as a result are persisted.
+enum PerkType {
+  FlexibleHours          @map("Flexible Hours")
+  SponsoredCertification @map("Sponsored Certification")
+  FastTrackTraining      @map("Fast-Track Training")
+  RecognitionAward       @map("Recognition Award")
+  ParkingSpot            @map("Parking Spot")
+  Other
+}
+
+model Perk {
+  id          Int      @id @default(autoincrement())
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  type        PerkType
+  customLabel String?
+  note        String?
+  grantedBy   String
+  grantedAt   DateTime @default(now())
+
+  @@index([employeeId])
+  @@map("perks")
+}
+
+model EducationRecord {
+  id            Int      @id @default(autoincrement())
+  employee      Employee @relation(fields: [employeeId], references: [id])
+  employeeId    String
+  degree        String
+  institution   String
+  fieldOfStudy  String?
+  yearCompleted Int?
+
+  @@index([employeeId])
+  @@map("education_records")
+}
+
+model WorkExperience {
+  id           Int      @id @default(autoincrement())
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  organization String
+  role         String
+  fromYear     Int?
+  toYear       Int?
+  description  String?
+
+  @@index([employeeId])
+  @@map("work_experience")
+}
+
+model Insurance {
+  id          Int      @id @default(autoincrement())
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  provider    String
+  policyNumber String
+  sumInsured  Int
+  premium     Int
+  validTill   String
+
+  @@index([employeeId])
+  @@map("insurance_policies")
+}
+
+model Compensation {
+  id         Int      @id @default(autoincrement())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId String   @unique
+  payGrade   String
+  basicPay   Int
+  daPercent  Float
+  daAmount   Int
+  hraPercent Float
+  hraAmount  Int
+  grossPay   Int
+
+  @@map("compensation")
+}
+
+model PerformanceRecord {
+  id                 Int      @id @default(autoincrement())
+  employee           Employee @relation(fields: [employeeId], references: [id])
+  employeeId         String
+  year               Int
+  rating             Float
+  attritionRiskScore Float
+  reviewComments     String?
+  reviewedBy         String?
+
+  @@index([employeeId])
+  @@map("performance_records")
+}
+
+model TrainingRecord {
+  id             Int      @id @default(autoincrement())
+  employee       Employee @relation(fields: [employeeId], references: [id])
+  employeeId     String
+  title          String
+  category       String
+  completionDate String
+  status         String
+
+  @@index([employeeId])
+  @@map("training_records")
+}
+
+model EmployeeSkill {
+  id           Int      @id @default(autoincrement())
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  name         String
+  proficiency  String
+  acquiredDate String?
+
+  @@index([employeeId])
+  @@map("employee_skills")
+}
+
+model AttendanceSummary {
+  id          Int      @id @default(autoincrement())
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  month       String
+  presentDays Int
+  totalDays   Int
+
+  @@index([employeeId])
+  @@map("attendance_summary")
+}
+
+enum TaskCategory {
+  Inspection
+  Survey
+  Maintenance
+  Approval
+  Audit
+  Drive
+  Development
+}
+
+enum TaskPriority {
+  High
+  Medium
+  Low
+}
+
+enum SlaStatus {
+  OnTrack  @map("On Track")
+  AtRisk   @map("At Risk")
+  Breached
+}
+
+enum TaskStatus {
+  Pending
+  InProgress @map("In Progress")
+  Escalated
+  Overdue
+  Completed
+}
+
+enum DelayRisk {
+  Low
+  Medium
+  High
+}
+
+model Task {
+  id         String       @id
+  project    String
+  title      String
+  category   TaskCategory
+  employee   Employee     @relation(fields: [employeeId], references: [id])
+  employeeId String
+  department String
+  priority   TaskPriority
+  dueIn      Int
+  tatDays    Int
+  slaStatus  SlaStatus
+  createdBy  String
+  updatedAt  String
+  status     TaskStatus
+  aiSummary  String
+  delayRisk  DelayRisk
+
+  sow                 String?
+  milestone           String?
+  eta                 String?
+  projectedCompletion String?
+
+  lastReassignedFrom String?
+  lastReassignReason String?
+  lastReassignedAt   String?
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  progressPct Int       @default(0)
+
+  @@map("tasks")
+}
+
+// Monthly rollup per department+zone, mirroring DepartmentFinance's
+// month-bucketing convention — powers the Task Management "previous month's
+// progress" trend chart with real historical numbers instead of a
+// hardcoded string (Task itself has no history: updatedAt gets overwritten
+// on every reassignment, so there is no other way to look back in time).
+model TaskMonthlySnapshot {
+  id             Int    @id @default(autoincrement())
+  department     String
+  zone           String
+  month          String
+  totalTasks     Int
+  completedTasks Int
+  overdueTasks   Int
+  avgTatDays     Float
+
+  @@unique([department, zone, month])
+  @@index([month])
+  @@map("task_monthly_snapshots")
+}
+
+enum DocStatus {
+  Verified
+  PendingReview @map("Pending Review")
+  Missing
+}
+
+model ServiceBookEntry {
+  id          String    @id
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  type        String
+  date        String
+  ocrScore    Float     @default(0)
+  status      DocStatus
+  description String?
+
+  @@index([employeeId])
+  @@map("service_book_entries")
+}
+
+model Asset {
+  id           String   @id
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  employeeId   String
+  type         String
+  description  String
+  assignedDate String
+  status       String
+  serialNo     String?
+
+  @@index([employeeId])
+  @@map("employee_assets")
+}
+
+model EmployeeEvent {
+  id          String   @id
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  kind        String
+  title       String
+  category    String?
+  date        String
+  description String?
+  awardedBy   String?
+  isPublic    Boolean  @default(false)
+
+  @@index([employeeId])
+  @@map("employee_events")
+}
+
+model DepartmentFinance {
+  id              Int    @id @default(autoincrement())
+  department      String
+  month           String
+  allocatedBudget Int
+  amountSpent     Int
+  category        String?
+
+  @@unique([department, month, category])
+  @@index([department])
+  @@map("department_finance")
+}
+
+model PayrollSummary {
+  id                  Int    @id @default(autoincrement())
+  totalDisbursement   String
+  processedEmployees  Int
+  pendingApprovals    Int
+  arrearsPending      String
+  updatedAt           DateTime @default(now())
+
+  @@map("payroll_summary")
+}
+
+// Vendor payments and employee expense/travel/medical claims — backs the
+// Finance "AI Expense & Anomaly Auditor". Anomaly flags are computed live
+// from these rows (amount vs. department average, duplicate submitter+amount
+// within a short window), not stored — see GET /api/v1/finance/expenses.
+model Expense {
+  id          String   @id
+  department  String
+  type        String
+  submitter   String
+  amount      Int
+  submittedAt DateTime
+
+  @@index([department])
+  @@map("expenses")
+}
+
+model WorkforceSnapshot {
+  id         Int    @id @default(autoincrement())
+  dept       String @unique
+  fullName   String
+  count      Int
+  attendance Float
+  vacancies  Int
+
+  @@map("workforce_snapshot")
+}
+
+enum UserRole {
+  HRAdmin        @map("HR Admin")
+  DepartmentHead @map("Department Head")
+  Employee
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  name         String
+  title        String
+  initials     String
+  createdAt    DateTime @default(now())
+
+  employeeId   String?
+  employee     Employee? @relation(fields: [employeeId], references: [id])
+
+  chatMessages ChatMessage[]
+
+  @@index([employeeId])
+  @@map("users")
+}
+
+// Persisted per-user copilot conversation turns, so the chatbot greeting can
+// reference what was discussed across logins (see floating-assistant.tsx).
+model ChatMessage {
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
+  role          String
+  text          String   @db.Text
+  redirectPath  String?
+  redirectLabel String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("chat_messages")
+}
+
+enum GrievanceCategory {
+  Harassment
+  Payroll
+  Facilities
+  Management
+  PeerConflict @map("Peer Conflict")
+}
+
+enum GrievanceSeverity {
+  Critical
+  High
+  Medium
+  Low
+}
+
+enum GrievanceSentiment {
+  Hostile
+  Frustrated
+  Neutral
+  Anxious
+}
+
+enum GrievanceStatus {
+  New
+  UnderInvestigation @map("Under Investigation")
+  Resolved
+  Escalated
+}
+
+model Grievance {
+  id          String   @id
+  category    GrievanceCategory
+  submitterId String?
+  submitter   Employee? @relation(fields: [submitterId], references: [id])
+  isAnonymous Boolean  @default(false)
+  department  String
+  subject     String
+  description String
+  aiSummary   String?
+  severity    GrievanceSeverity
+  sentiment   GrievanceSentiment
+  status      GrievanceStatus @default(New)
+  createdAt   DateTime @default(now())
+
+  updates     GrievanceUpdate[]
+
+  @@index([submitterId])
+  @@map("grievances")
+}
+
+model GrievanceUpdate {
+  id          Int      @id @default(autoincrement())
+  grievance   Grievance @relation(fields: [grievanceId], references: [id])
+  grievanceId String
+  status      GrievanceStatus
+  note        String
+  createdBy   String
+  createdAt   DateTime @default(now())
+
+  @@index([grievanceId])
+  @@map("grievance_updates")
+}
+
+model StatutoryCompliance {
+  id                      Int      @id @default(autoincrement())
+  employeeId              String   @unique
+  employee                Employee @relation(fields: [employeeId], references: [id])
+  pfNumber                String
+  pfMonthlyContribution   Int
+  esicApplicable          Boolean
+  esicNumber              String?
+  esicMonthlyContribution Int?
+  cghsNumber              String?
+  gratuityEligible        Boolean
+  gratuityAccrued         Int
+  tdsMonthlyDeduction     Int
+  maternityBenefitStatus  String
+
+  @@map("statutory_compliance")
+}
+
+model HolidayCalendar {
+  id   Int    @id @default(autoincrement())
+  date String
+  name String
+  type String
+
+  @@map("holiday_calendar")
+}
+
+model LeaveRule {
+  leaveType           String  @id
+  entitledDaysPerYear Int
+  carryForwardAllowed Boolean
+  maxCarryForward     Int
+  eligibilityNote     String
+  minNoticeDays       Int     @default(0)
+
+  @@map("leave_rules")
+}
+
+// Org-wide (department: null) or department-scoped windows during which
+// leave cannot be applied for — e.g. monsoon duty freeze, festival freeze.
+model LeaveBlackout {
+  id         Int    @id @default(autoincrement())
+  fromDate   String
+  toDate     String
+  department String?
+  reason     String
+
+  @@map("leave_blackouts")
+}
+
+model StatutoryDeadline {
+  id            Int     @id @default(autoincrement())
+  title         String
+  category      String
+  recurrence    String
+  dueDayOfMonth Int?
+  dueDate       String?
+
+  @@map("statutory_deadlines")
+}
+
+model DepartmentProfile {
+  department     String  @id
+  headName       String
+  headTitle      String
+  budgetCr       Float
+  auditStatus    String
+  lastAuditDate  String
+  headEmployeeId String?
+  riskNote       String?
+
+  @@map("department_profiles")
+}
+
+model Vacancy {
+  id          Int    @id @default(autoincrement())
+  department  String
+  designation String
+  sanctioned  Int
+  criticality String?
+  note        String?
+
+  candidates  Candidate[]
+
+  @@index([department])
+  @@map("vacancies")
+}
+
+model Candidate {
+  id              String   @id
+  name            String
+  email           String
+  phone           String?
+  department      String
+  designation     String
+  vacancyId       Int?
+  vacancy         Vacancy? @relation(fields: [vacancyId], references: [id])
+  source          String
+  status          String
+  appliedDate     String
+  resumeScore     Int?
+  experienceYears Float?
+  expectedCtc     Int?
+  aiSummary       String?
+  createdAt       DateTime @default(now())
+
+  interviews CandidateInterview[]
+  onboarding OnboardingCase?
+
+  @@index([department])
+  @@index([vacancyId])
+  @@map("candidates")
+}
+
+model CandidateInterview {
+  id          Int       @id @default(autoincrement())
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+  candidateId String
+  round       String
+  scheduledAt String
+  interviewer String
+  status      String
+  feedback    String?
+  rating      Float?
+
+  @@index([candidateId])
+  @@map("candidate_interviews")
+}
+
+model OnboardingCase {
+  id              String    @id
+  candidate       Candidate? @relation(fields: [candidateId], references: [id])
+  candidateId     String?    @unique
+  employee        Employee?  @relation("EmployeeOnboarding", fields: [employeeId], references: [id])
+  employeeId      String?    @unique
+  buddy           Employee?  @relation("OnboardingBuddy", fields: [buddyEmployeeId], references: [id])
+  buddyEmployeeId String?
+  name            String
+  department      String
+  designation     String
+  startDate       String
+  status          String    @default("NotStarted")
+  progressPct     Int       @default(0)
+  createdAt       DateTime  @default(now())
+
+  tasks OnboardingTask[]
+
+  @@index([department])
+  @@map("onboarding_cases")
+}
+
+model OnboardingTask {
+  id               Int            @id @default(autoincrement())
+  onboardingCase   OnboardingCase @relation(fields: [onboardingCaseId], references: [id])
+  onboardingCaseId String
+  category         String
+  title            String
+  status           String  @default("Pending")
+  dueDate          String?
+  completedDate    String?
+  assignedTo       String?
+
+  @@index([onboardingCaseId])
+  @@map("onboarding_tasks")
+}
+
+model Project {
+  id             String @id
+  department     String
+  name           String
+  status         String
+  progressPct    Int
+  startDate      String
+  targetDate     String
+  budgetCr       Float
+  leadEmployeeId String?
+  description    String?
+
+  @@index([department])
+  @@map("projects")
+}
+
+model LegalCase {
+  id           String  @id
+  caseNumber   String
+  type         String
+  title        String
+  department   String
+  court        String
+  filedDate    String
+  status       String
+  nextHearing  String?
+  exposureLakh Int
+  aiSummary    String
+
+  @@map("legal_cases")
+}
+
+model EmergencyAlert {
+  id                  String   @id
+  category            String
+  title               String
+  description         String
+  department          String
+  location            String?
+  severity            String
+  status              String   @default("Open")
+  reportedBy          String?
+  authorityEmployeeId String?
+  createdAt           DateTime @default(now())
+  acknowledgedAt      DateTime?
+  resolvedAt          DateTime?
+
+  updates             EmergencyAlertUpdate[]
+
+  @@map("emergency_alerts")
+}
+
+model EmergencyAlertUpdate {
+  id        Int            @id @default(autoincrement())
+  alert     EmergencyAlert @relation(fields: [alertId], references: [id])
+  alertId   String
+  status    String
+  channel   String?
+  note      String
+  createdAt DateTime       @default(now())
+
+  @@index([alertId])
+  @@map("emergency_alert_updates")
+}
+
+// HR Calendar — freeform entries HR creates directly (meetings, deadlines,
+// holidays, notices). The calendar's other event types (training sessions,
+// retirements, leave) are read-only projections computed live from their own
+// tables (see GET /api/v1/calendar/events) — this model exists only for the
+// entries that have no underlying record of their own.
+model CalendarEvent {
+  id         String   @id @default(cuid())
+  title      String
+  date       String // "YYYY-MM-DD"
+  type       String   @default("Notice") // Meeting | Deadline | Holiday | Notice
+  department String?
+  note       String?
+  createdBy  String?
+  createdAt  DateTime @default(now())
+
+  @@index([date])
+  @@map("calendar_events")
+}
+
+// Command Centre "AI Agents" strip — one row per scheduler tick per agent.
+// status/confidence/findings/narrative are all computed live (see
+// server-core/agents.js); the LLM (server-ai) only phrases narrative +
+// recommendedAction around numbers the SQL layer already decided.
+model AgentRun {
+  id                 Int      @id @default(autoincrement())
+  agentKey           String
+  status             String
+  confidence         Int
+  findings           Json
+  narrative          String
+  recommendedAction  String
+  ranAt              DateTime @default(now())
+
+  @@index([agentKey, ranAt])
+  @@map("agent_runs")
+}
+
+// DPDP Act 2023 Data-Rights Center — a real, working request tracker (not a
+// static compliance notice): employees can file an Access/Correction/
+// Erasure request against their own HR/biometric data, and HR can actually
+// resolve it, mirroring the existing Grievance model's shape/workflow.
+enum PrivacyRequestType {
+  Access
+  Correction
+  Erasure
+}
+
+enum PrivacyRequestStatus {
+  New
+  InProgress @map("In Progress")
+  Resolved
+}
+
+model PrivacyRequest {
+  id          String               @id
+  employeeId  String
+  employee    Employee             @relation(fields: [employeeId], references: [id])
+  type        PrivacyRequestType
+  description String
+  status      PrivacyRequestStatus @default(New)
+  notes       String?
+  createdAt   DateTime             @default(now())
+  resolvedAt  DateTime?
+
+  @@index([employeeId])
+  @@map("privacy_requests")
+}

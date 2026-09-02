@@ -1,0 +1,228 @@
+{
+  "type": "docx",
+  "source": "Risk & Compliance - aaryan.tables.json",
+  "verified": true,
+  "n_tables": 1,
+  "tables": [
+    {
+      "grid": [
+        [
+          "SUB MODULES",
+          "Probable Risk",
+          "PURPOSE",
+          "IMPACT ON PROJECT AND IMPACT ON OTHER PARAMETERS",
+          "WORKFLOW",
+          "SUPPORTING DOCUMENTS – SCHEDULES, CONTRACTUAL, ETC.",
+          "BY"
+        ],
+        [
+          "Land Acquisition & Utility Shifting",
+          "• Land disputes\n • Encumbrances\n • Utility shifting delays\n • Relocation challenges\n • Equipment needs\n • Timeline pressure",
+          "Ensure timely handover of encumbrance-free land and relocation of utilities",
+          "Delays in land handover stall mobilization, affect progress, increase costs",
+          "Coordination with Revenue Dept., Utility agencies → Joint verification → Clearance certificate → Site handover",
+          "EPC AM 41A: Section 2.1, Clause 2.1.3 (ROW availability), Page 12",
+          "MSIDC and AE"
+        ],
+        [
+          "Utility Shifting",
+          "• Delay in utility identification and mapping \n• Inaccurate underground utility data \n• Delay in approvals/NOCs from utility agencies \n• Relocation challenges due to space constraints \n• Damage to existing utility lines during excavation \n• Coordination gaps among departments/agencies \n• Insufficient budget for shifting works \n• Non-availability of utility shifting materials/equipment \n• Public inconvenience and traffic disruptions \n• Delay in restoration and re-commissioning of utilities \n• Safety hazards during shifting operations \n• Timeline pressure affecting project progress",
+          "Ensure timely relocation of utilities",
+          "Delay in utility relocations will lead to delays in execution of project works.",
+          "Coordination with Utility agencies → Joint verification → Clearance certificate",
+          "",
+          "EPC Contractor"
+        ],
+        [
+          "Third party permissions. Eg. Forest Clearance, PUC clearance, Labor License, etc.",
+          "• Delay in drawing submissions \n• Frequent design revisions \n• Non-compliance with IRC/MoRTH standards \n• Delayed approval from Authority/AE \n• Coordination gaps between design and execution teams \n• Incomplete drawings/documentation",
+          "Obtain timely approvals during mobilization/development period",
+          "Delays in getting permissions will delay the works and impact the progress.",
+          "EPC Contractor coordination with respective agencies → get permissions",
+          "",
+          "MSRDC and EPC Contractor"
+        ],
+        [
+          "Survey Data and TBMs correctness",
+          "• Incorrect or inaccurate survey data \n• Disturbance/damage of Temporary Bench Marks (TBMs) \n• Errors in coordinates, levels, and alignments \n• Inadequate site verification and validation \n• Mismatch between survey data and actual ground conditions \n• Use of uncalibrated or faulty survey instruments \n• Lack of proper referencing and documentation of TBMs \n• Human errors during data collection and recording \n• Delay in updating revised survey information \n• Inconsistency between design drawings and survey data \n• Loss of TBM due to construction activities or natural causes \n• Poor inter-departmental coordination for survey handover \n• Inadequate control points and benchmarks \n• Errors in GIS/DPMS integration and digital mapping \n• Rework and alignment corrections due to faulty survey inputs",
+          "EPC Contractor shall verify and confirm the correctness of survey data provided by the Employer.",
+          "Deviations/ settlements in TBMS will adversely impact the permanent works",
+          "Survey data from Employer → EPC contractor to verify and confirm along  coordination with interface contractors",
+          "",
+          "MSRDC and EPC Contractor"
+        ],
+        [
+          "Interface system works requirements incorporation in civil / structural drawings",
+          "• Incomplete incorporation of interface requirements in drawings \n• Lack of coordination between civil, structural, and system teams \n• Mismatch between system design and structural provisions \n• Delayed receipt of interface inputs from stakeholders \n• Frequent revisions in interface requirements \n• Inadequate space allocation for utilities/equipment \n• Clash between structural elements and system components \n• Non-compliance with technical standards/specifications \n• Errors in embedded items, sleeves, or openings details \n• Delayed approval of revised drawings \n• Communication gaps among consultants and contractors \n• Use of outdated interface drawings at site \n• Difficulty in future maintenance/accessibility provisions \n• Rework due to missed interface provisions during execution \n• Delays impacting downstream installation and commissioning activities",
+          "Interfacing works requirements such as interchanges, utility services, SCADA, and HTMS, etc.",
+          "Delay in coordination and data incorporation will delay in drawings submission, and execution of works and may cause reworks.",
+          "Employer CA → EPC Contractor (Civil Design Team & System Interface works) + Third Party Works like interchanges etc.",
+          "",
+          "MSRDC and EPC Contractor"
+        ],
+        [
+          "Draft Work Programme (DWP) / Baseline Schedule",
+          "• Delay in submission of DWP/Baseline Schedule \n• Unrealistic timelines and milestones \n• Inadequate resource planning and allocation \n• Improper sequencing of activities \n• Non-integration of land acquisition and utility shifting timelines \n• Frequent revisions to baseline schedule \n• Lack of coordination among stakeholders \n• Failure to identify critical path activities \n• Inaccurate productivity assumptions \n• Delay in approval of work programme \n• Non-alignment with contractual milestones and CA provisions \n• Absence of risk mitigation and contingency planning \n• Poor monitoring and updating of schedule progress \n• Inadequate consideration of seasonal/weather impacts \n• Mismatch between planned vs actual progress execution",
+          "A valid DWP/Baseline Schedule complying with Project Milestones or KPIs is required.",
+          "DWP or baseline schedule without proper activity sequencing, duration, float, and critical path results delay of works and achievement of KPIs",
+          "EPC Contractor programme submission → AE review and approval → Information to the Employer",
+          "",
+          "EPC Contractor, AE"
+        ],
+        [
+          "Design & Drawing Approvals",
+          "• Delay in submission of drawings by contractor/consultant \n• Incomplete or incorrect drawings \n• Frequent design revisions and changes \n• Non-compliance with IRC/MoRTH/IS standards \n• Delayed review and approval by Authority/AE \n• Lack of coordination between design and site teams \n• Errors in structural calculations/design assumptions \n• Delay in approval of revised drawings \n• Mismatch between drawings and site conditions \n• Pending comments/observations not complied with \n• Inadequate geotechnical or survey data \n• Delays in obtaining third-party/NHAI/utility approvals \n• Ambiguity in specifications and design criteria \n• Use of outdated drawing revisions at site \n• Delayed issuance of “Good for Construction (GFC)” drawings",
+          "Timely review and approval of GADs, structural drawings, and revisions",
+          "Delay in approvals halts execution, impacts progress monitoring",
+          "Submission by EPC → Review by AE/IE → Approval by Authority → Issue for construction",
+          "EPC AM 41A: Section 3.2, Clause 3.2.5 (Design submission & approval), Page 18",
+          "MSIDC and AE"
+        ],
+        [
+          "Change of Scope in compliance to the CA and Codal provisions and Guidelines",
+          "• Delay in approval of change of scope proposals \n• Non-compliance with Contract Agreement (CA) provisions \n• Violation of codal guidelines and statutory norms \n• Inadequate justification/documentation for scope change \n• Cost escalation beyond approved limits \n• Disputes over revised quantities and rates \n• Delays in revised drawings/design approvals \n• Impact on project timelines and milestones \n• Funding and budget allocation constraints \n• Lack of stakeholder coordination and concurrence \n• Frequent scope changes causing execution disruptions \n• Risk of audit observations and compliance issues \n• Delayed amendment/supplementary agreement execution \n• Rework and wastage due to revised scope \n• Ambiguity in interpretation of contractual clauses",
+          "Defined scope and meeting the stakeholder requirements for proper functioning of the project.",
+          "Cost and Time implications (Saving or Expenses)",
+          "Project requirements asper the Employer instructions/ EPC Contractor requests → AE review and recommendation to the Employer’s concurrence.",
+          "",
+          "Employer, \nEPC Contractor, \nAE"
+        ],
+        [
+          "Material Quality & Testing (ITF)\n\nInspection Test Plans & RFIs",
+          "Failed material tests \n• Delay in sample approvals \n• Non-availability of testing equipment \n• Inadequate laboratory facilities \n• Data entry/reporting delays in DPMS \n• Use of non-approved materials",
+          "Ensure compliance with MoRTH/IRC standards through lab & field tests",
+          "Failed tests delay works, affect quality ratings, trigger penalties",
+          "Sampling → Testing → Results entry in DPMS → Approval/rejection → Corrective action",
+          "EPC AM 41A: Section 4.3, Clause 4.3.7 (Quality Assurance & Testing), Page 25",
+          "EPC QA Team, AE, ITF and Auditors"
+        ],
+        [
+          "Induction of new materials / new technology like UHPFRC etc.",
+          "• Lack of approval from competent authorities \n• Non-availability of technical specifications/standards \n• Limited expertise and skilled manpower \n• Inadequate training for handling new technology \n• Compatibility issues with existing design/construction methods \n• Delays in procurement and supply of specialized materials \n• High initial cost and budget overruns \n• Failure in trial mixes/testing and validation \n• Lack of certified vendors or suppliers \n• Performance uncertainty under field conditions \n• Delayed acceptance by stakeholders/consultants \n• Insufficient quality control and monitoring mechanisms \n• Equipment or machinery limitations for application \n• Delays in revision of drawings/specifications \n• Long-term durability and maintenance concerns",
+          "To utilize latest developments in materials, enhance productivity, cost efficiency, and delay mitigation.",
+          "Introducing new materials in mid of the project faces approval challenges, performance risks, proprietary rights and project delivery risks",
+          "Employer / EPC Contractor proposal → AE  recommendation → Employer concurrance",
+          "",
+          "EPC Contractor, AE and Employer"
+        ],
+        [
+          "Manpower & Machinery Deployment",
+          "• Skilled manpower shortage \n• Equipment breakdowns \n• Idle machinery \n• Low workforce productivity \n• Delayed mobilization \n• Non-availability of backup equipment",
+          "Adequate skilled workforce and functional machinery on site",
+          "Shortage or breakdowns cause slippages, affect progress, safety, and compliance",
+          "Deployment plan → Daily logs → Breakdown reporting → Replacement/repair",
+          "EPC AM 41A: Section 5.1, Clause 5.1.2 (Contractor’s obligations – manpower & equipment), Page 31",
+          "MSIDC, EPC Contractor and Authority Engineer"
+        ],
+        [
+          "Safety & HSE Compliance",
+          "• PPE non-compliance \n• Unsafe work practices \n• Site accidents/injuries \n• Inadequate safety training \n• Delayed incident reporting \n• Poor housekeeping at site",
+          "Maintain safe work environment and compliance with statutory norms",
+          "Accidents cause stoppages, reputational damage, penalties",
+          "Toolbox talks → PPE checks → Incident reporting → Corrective action → Monthly HSE audits",
+          "EPC AM 41A: Section 6.4, Clause 6.4.1 (Safety obligations), Page 38",
+          "MSIDC, EPC Contractor and Authority Engineer"
+        ],
+        [
+          "Progress Monitoring & Reporting",
+          "• Delayed submission of progress reports \n• Inaccurate or manipulated progress data \n• Mismatch between planned vs actual progress \n• Delayed updating in DPMS/MIS systems \n• Lack of coordination among stakeholders \n• Poor milestone tracking and scheduling \n• Delayed escalation of critical issues \n• Inadequate site verification and inspections \n• Non-availability of supporting documents/photos \n• Communication gaps between field and management teams \n• Inconsistent reporting formats and records \n• Failure to identify early warning signs of delays",
+          "Track planned vs actual progress, milestone achievement",
+          "Slippages affect payment schedules, contractor ratings, escalation workflows",
+          "Weekly progress review → DPMS entry → Variance analysis → Escalation if >10% deviation",
+          "EPC AM 41A: Section 7.2, Clause 7.2.4 (Progress reporting & monitoring), Page 44",
+          "MSIDC, DPMU, AE and EPC Contractor Planning Engineer, ITF Contractor, Utility Shifting Contractor"
+        ],
+        [
+          "Financial Risks (Payments & Claims)",
+          "• Delay in RA bill processing \n• Disputed claims/variations \n• Cash flow shortages \n• Delayed fund release \n• Incorrect bill documentation \n• Escalation in project cost",
+          "Ensure timely RA bills, mobilization advances, and claim settlements",
+          "Delays affect contractor cash flow, progress, and disputes",
+          "Submission of RA bills → Verification → Approval → Payment release",
+          "EPC AM 41A: Section 8.1, Clause 8.1.6 (Payments & claims), Page 52",
+          "MSIDC (Technical & Finance) / Authority Engineer"
+        ],
+        [
+          "Delay Damages (LD)",
+          "• Delay in achieving project milestones \n• Failure to complete works within contractual timeline \n• Slow mobilization of manpower and machinery \n• Delays due to pending land acquisition/utility shifting \n• Frequent design changes and approval delays \n• Contractor resource shortages \n• Poor project planning and monitoring \n• Supply chain and material procurement delays \n• Delayed decision-making by stakeholders \n• Disputes regarding applicability/calculation of LD \n• Escalation of project cost due to prolonged duration \n• Risk of contract termination due to excessive delays",
+          "Slow progress causes nonachievement of Project Milestones resulting in Delay Damages recovery in RA Bills or Additional BG to safeguard the Employer interests.",
+          "Financial impact to the Contractor due to cashflow issues and late processing of RA bills, etc.",
+          "Employer notice → Recovery from EPC Contractor RA Bills or support with additional BG etc.",
+          "",
+          "MSRDC & AE"
+        ],
+        [
+          "Performance Bank Guarantee (PBG) Risk",
+          "• Fake or forged bank guarantee \n• Expired PBG \n• Insufficient validity period \n• Incorrect BG format/non-compliance with contract conditions \n• Delay in submission of PBG \n• Non-renewal before expiry \n• Issuance from non-approved bank \n• Insufficient PBG amount/value \n• Invocation disputes with contractor/bank \n• Tampered or altered BG documents",
+          "Contractor unable to provide PBG",
+          "Financial exposure to client; project start may stall",
+          "Contract award → PBG submission check → escalation to finance/legal → risk register entry",
+          "Contract clauses on PBG, Bank guarantee documents",
+          "MSIDC and AE"
+        ],
+        [
+          "Environmental & Social Risks",
+          "• Delay in environmental clearances \n• Public objections/protests \n• Tree cutting restrictions \n• Pollution and waste management issues \n• Rehabilitation and resettlement disputes \n• Non-compliance with environmental norms",
+          "Compliance with environmental clearances, community engagement",
+          "Non-compliance halts work, attracts penalties, affects reputation",
+          "Monitoring → Reporting → Corrective measures → Stakeholder consultations",
+          "EPC AM 41A: Section 9.3, Clause 9.3.2 (Environmental & social obligations), Page 61",
+          "EPC Contractor and Authority Engineer"
+        ],
+        [
+          "Force Majeure & External Risks",
+          "• Floods/heavy rainfall \n• Strikes and bandh \n• Political unrest \n• Pandemic or health emergencies \n• Supply chain disruptions \n• Law and order issues",
+          "Manage risks from floods, strikes, political events, War, epidemics (pandemics), unforeseen events or ground conditions",
+          "Work stoppages, cost overruns, deadline extensions",
+          "Incident reporting → Contractual invocation → Revised schedule → Compensation assessment",
+          "EPC AM 41A: Section 10.2, Clause 10.2.1 (Force Majeure provisions), Page 70",
+          "MSIDC, DPMU, AE and EPC Contractor\n\nMSRDC, AE and Contractor"
+        ],
+        [
+          "JV Partnership Risk",
+          "• Withdrawal of JV partner \n• Financial disputes between partners \n• Unequal resource contribution \n• Delayed decision making \n• Contractual disagreements \n• Poor coordination among JV entities",
+          "Capture risk of one JV partner pulling out",
+          "Can cause contractual disputes, delays, and financial instability",
+          "JV agreement monitoring → early-warning alerts → risk register update → mitigation via substitution or re-tendering",
+          "JV agreements, Contract clauses on withdrawal, Performance guarantees",
+          "MSIDC, AE and EPC Contractor"
+        ],
+        [
+          "Back-to-Back Subcontracting Risk, part work subcontracting risk",
+          "• Unauthorized subcontracting \n• Poor subcontractor performance \n• Lack of accountability \n• Quality non-compliance \n• Delays due to multiple subcontracting layers \n• Contractual disputes",
+          "Contractor awarding work to another subcontractor",
+          "May dilute accountability, cause quality issues, and delay in activity sequence and timelines",
+          "Contract award monitoring → subcontractor vetting → compliance checks → escalation if deviation",
+          "Contract award documents, Subcontractor agreements, Compliance schedules",
+          "MSIDC and AE\n\nMSRDC and AE"
+        ],
+        [
+          "Mid-way Contractor Withdrawal Risk",
+          "• Financial insolvency \n• Resource abandonment \n• Delayed project completion \n• Re-tendering delays \n• Pending liabilities and claims \n• Legal disputes and arbitration",
+          "Selected contractor leaves job due to financial difficulties",
+          "Severe disruption to project timelines, cost overruns, and re-tendering delays",
+          "Financial health monitoring → early-warning alerts → risk register entry → reallocation/re-tendering workflow",
+          "Contractor financial records, Contract clauses on termination, Insurance cover",
+          "MSIDC and AE"
+        ],
+        [
+          "Compliance with the Law of the Land",
+          "• Delay in obtaining statutory approvals and permits \n• Non-compliance with local/state regulations \n• Violation of environmental laws and norms \n• Labour law non-compliance \n• Land ownership/title disputes \n• Court cases and legal stay orders \n• Non-adherence to tax and financial regulations \n• Failure to comply with contract conditions \n• Unauthorized construction or encroachment \n• Delayed renewal of licenses and clearances \n• Penalties, fines, and legal notices from authorities \n• Changes in government policies/regulations impacting project execution",
+          "Verify the Contractor’s compliance with the applicable Laws of the Land. Eg. Environment and Forest, Mining Act, Explosion Act, BOCW act, New Labour Codes, PUC, Police verification for staff and labour etc. as applicable.",
+          "Noncompliance to respective Acts/laws results delay and punishments as applicable",
+          "Periodical submission of the EPC contractor → AE verification and intimation to the Employer",
+          "NOCs and Permits, Licenses, bookkeeping records, etc.",
+          "EPC Contractor and AE to MSRDC"
+        ]
+      ],
+      "verified": true,
+      "needs_human_spotcheck": true,
+      "cross_check": {
+        "exact_match_vs_fresh_python_docx": true,
+        "verified": true,
+        "method": "fresh python-docx cell read"
+      }
+    }
+  ],
+  "needs_human_spotcheck": true,
+  "cross_check_method": "fresh python-docx cell read"
+}

@@ -1,0 +1,107 @@
+# =============================================================================
+# kb-extract-rig — project metadata, dependency groups, and tooling config.
+#
+# The runtime is a set of FLAT modules at the repo root (import common,
+# import robust_tables, ...) run directly as scripts:
+#
+#     python pipeline.py --in samples --out out          # primary entry point
+#     python tests/test_core.py                           # 96 pure-logic tests
+#
+# This file does NOT change that. It adds proper packaging metadata + declarative
+# dependency EXTRAS so a tester can install everything in one step. Two options:
+#
+#     pip install -r requirements.txt                     # simplest (CPU / digital path)
+#     pip install -e .                                    # same core deps, editable
+#     pip install -e ".[gpu]"      # + scanned/OCR ladder  (needs a GPU + system tesseract)
+#     pip install -e ".[schedule]" # + .xer/.mpp parser    (needs a JVM / Java 8+)
+#     pip install -e ".[dev]"      # + pytest + ruff
+#
+# requirements*.txt remain the authoritative pinned install for the build host;
+# the pins below mirror requirements.txt so the two never drift.
+# =============================================================================
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kb-extract-rig"
+version = "0.1.0"
+description = "Sovereign, completeness-audited document + schedule extraction engine (PDF/scanned/Excel/Word/Primavera-P6/MS-Project) with an arithmetic money tie-out, confidence scoring, HITL, and an 'ask for the original Excel' table-reconciliation backstop."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary — RODIC Consultants" }
+keywords = ["ocr", "pdf-extraction", "table-extraction", "boq", "primavera", "mpxj", "docling"]
+
+# --- CORE runtime deps (CPU-only, digital happy-path). Mirrors requirements.txt.
+dependencies = [
+    "pymupdf==1.27.1",          # import name: fitz — PDF text + page rendering
+    "pdfplumber==0.11.9",       # word geometry -> digital table reconstruction
+    "openpyxl==3.1.5",          # .xlsx read + the only xlsx writer (table_pdf output)
+    "python-docx==1.2.0",       # .docx tables + paragraphs
+    "numpy==2.4.2",
+    "opencv-python==4.13.0.92", # cv2: render prep / deskew (degrades gracefully if absent)
+    "PyYAML==6.0.3",            # optional config.yaml support (graceful if absent)
+    "psutil==7.2.2",            # peak-RSS reporting in the eval benchmark
+    "rapidfuzz==3.10.1",        # fuzzy match (reconcile / amount-word) — difflib fallback exists
+    "tqdm==4.67.3",             # progress bars — no-op fallback if absent
+]
+
+[project.optional-dependencies]
+# GPU OCR ladder (sovereign: docTR=Mindee + Tesseract voting + img2table). torch is assumed
+# ALREADY installed with the correct CUDA build — intentionally NOT pinned here so this extra
+# never clobbers a working torch+CUDA install. Mirrors requirements-gpu.txt (minus torch).
+gpu = [
+    "python-doctr",
+    "pytesseract",              # needs system Tesseract 5 + eng/hin/mar language packs
+    "scikit-image",
+    "img2table",
+    "Pillow",
+    "xlrd==2.0.1",              # legacy .xls reading
+]
+# Primavera P6 (.xer/PMXML) + MS Project (.mpp/MSPDI) via MPXJ. Needs a JVM (Java 8+).
+# Pin to your server's exact mpxj version, then confirm the API with probe_schedule_mpxj.py.
+schedule = [
+    "mpxj",                     # bundles the MPXJ jars; pulls in JPype1 transitively
+]
+# Small CPU-only optional features (lazy-imported; the rig degrades gracefully without them).
+extras = [
+    "reportlab==4.4.10",        # export_pdf.py — readable-PDF export
+    "scipy==1.17.0",            # reconcile_tables.py — global row assignment
+    "xlrd==2.0.1",              # legacy .xls reading
+]
+# Multi-engine COMPARISON harness (eval-only, opt-in). docling is sovereign (IBM, MIT).
+# PaddleOCR is NON-SOVEREIGN and deliberately excluded — install it into its own venv.
+compare = [
+    "docling",
+]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[project.urls]
+Documentation = "README.md"
+
+# --- packaging: the runtime is flat single-file modules at the repo root. -----
+# List them explicitly (no auto-discovery) so `pip install -e .` installs exactly the
+# runtime, while `python pipeline.py` keeps working from the source tree unchanged.
+# eval/ and tests/ are run in place (not packaged); samples/ is data, not code.
+[tool.setuptools]
+py-modules = [
+    "audit_run", "common", "doc_layout", "docling_layout", "docx_extract",
+    "ensemble_extract", "excel_extract", "export_pdf", "extract_images",
+    "extract_schedule", "links_qr", "paddle_layout", "pdf_extract", "pipeline",
+    "probe_schedule_mpxj", "reconcile_tables", "robust_tables", "run_ocr_eval",
+    "scanned_layout", "scanned_tables", "schedule_mpxj", "schedule_normalize",
+    "table_pdf",
+]
+
+[tool.pytest.ini_options]
+# The canonical suite is `python tests/test_core.py` (its own runner). This lets `pytest`
+# discover the same test_* functions too, for anyone who prefers it.
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+# NOTE: ruff configuration lives in ruff.toml (auto-discovered by ruff and by check.sh) —
+# it is intentionally NOT duplicated here so there is one lint config, not two.

@@ -1,0 +1,302 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
+/* Display face for page-level titles only (every route's real <h1>, applied
+   globally below instead of per-file) — Inter stays the primary font for body
+   copy, data labels and KPI numbers. */
+@import "@fontsource/fraunces/400.css";
+@import "@fontsource/fraunces/500.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* App canvas — "Nexus" premium SaaS palette */
+  --background: #F8F9FA;
+  --foreground: oklch(0.18 0.02 260);
+  --surface: #FFFFFF;
+  --surface-muted: #F1F2F4;
+
+  --card: #FFFFFF;
+  --card-foreground: oklch(0.18 0.02 260);
+  --popover: #FFFFFF;
+  --popover-foreground: oklch(0.18 0.02 260);
+
+  /* Deep civic teal — replaces the earlier "Nexus indigo" (#5347CE), a hue
+     ubiquitous enough in AI-product UIs to read as a template default.
+     Same lightness/chroma relationship the indigo had (L~0.42, C~0.13),
+     just rotated to teal's hue (~195) so contrast against white text and
+     the tint-ratio dark-mode fixes below carry over unchanged. */
+  --primary: oklch(0.42 0.1 195);
+  --primary-foreground: #FFFFFF;
+  --primary-soft: oklch(0.95 0.025 195);
+
+  --secondary: oklch(0.955 0.008 250);
+  --secondary-foreground: oklch(0.22 0.03 260);
+
+  --muted: oklch(0.96 0.006 250);
+  --muted-foreground: oklch(0.5 0.02 258);
+
+  --accent: oklch(0.95 0.04 230);
+  --accent-foreground: oklch(0.22 0.06 258);
+
+  --destructive: oklch(0.55 0.21 27);
+  --destructive-foreground: oklch(0.99 0.003 250);
+  --success: oklch(0.56 0.13 155);
+  --success-foreground: oklch(0.99 0.003 250);
+  /* Nexus saffron — the "Accent/Alerts" tone */
+  --warning: #F4C430;
+  --warning-foreground: #4A3800;
+  --info: oklch(0.55 0.13 240);
+  --info-foreground: oklch(0.99 0.003 250);
+
+  --border: oklch(0.85 0.012 255);
+  --input: oklch(0.85 0.012 255);
+  --ring: oklch(0.42 0.1 195);
+
+  --chart-1: oklch(0.45 0.13 258);
+  --chart-2: oklch(0.6 0.12 200);
+  --chart-3: oklch(0.65 0.14 155);
+  --chart-4: oklch(0.7 0.16 70);
+  --chart-5: oklch(0.6 0.18 25);
+
+  /* Sidebar — a permanent dark civic-navy anchor, deliberately decoupled from
+     the light/dark theme toggle (which only affects the main canvas). Same
+     values the app used for its dark-theme sidebar before; now the only
+     sidebar palette, in both themes. */
+  --sidebar: oklch(0.2 0.025 260);
+  --sidebar-foreground: oklch(0.96 0.005 250);
+  --sidebar-primary: oklch(0.6 0.11 195);
+  --sidebar-primary-foreground: oklch(0.98 0.005 250);
+  --sidebar-accent: oklch(0.23 0.03 260);
+  --sidebar-accent-foreground: oklch(0.6 0.11 195);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.6 0.11 195);
+}
+
+.dark {
+  --background: oklch(0.16 0.02 260);
+  --foreground: oklch(0.96 0.005 250);
+  --surface: oklch(0.2 0.025 260);
+  --surface-muted: oklch(0.23 0.03 260);
+  --card: oklch(0.2 0.025 260);
+  --card-foreground: oklch(0.96 0.005 250);
+  --popover: oklch(0.2 0.025 260);
+  --popover-foreground: oklch(0.96 0.005 250);
+
+  /* Same civic-teal hue/chroma as the light theme's oklch(0.42 0.1 195) —
+     only lightness moves (same 0.42 -> 0.6 bump the original indigo used
+     for dark mode), so the brand color reads as the same color in both
+     themes instead of shifting to an unrelated hue. */
+  --primary: oklch(0.6 0.11 195);
+  --primary-foreground: oklch(0.98 0.005 250);
+  --primary-soft: oklch(0.28 0.06 195);
+  --secondary: oklch(0.26 0.03 260);
+  --secondary-foreground: oklch(0.96 0.005 250);
+  --muted: oklch(0.26 0.03 260);
+  --muted-foreground: oklch(0.7 0.02 255);
+  /* Hue nudged to match the light theme's accent (230) rather than drifting to 240. */
+  --accent: oklch(0.3 0.07 230);
+  --accent-foreground: oklch(0.96 0.005 250);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.6 0.11 195);
+
+  /* Status tones were carried over unchanged from the light theme, which
+     made them read as flat/dull against dark cards and, for destructive/info,
+     fall below comfortable text contrast when used as bg-{tone}/10 text-{tone}
+     pills (Section.tsx Pill component). Lightened each while keeping the same
+     hue so they stay legible both as tinted text-on-dark-card and as solid
+     fills with a light foreground. */
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0.003 250);
+  --success: oklch(0.58 0.14 155);
+  --success-foreground: oklch(0.99 0.003 250);
+  --info: oklch(0.58 0.13 235);
+  --info-foreground: oklch(0.99 0.003 250);
+
+  /* --warning-foreground was only ever defined in :root as a dark brown
+     (#4A3800) meant to sit on top of a solid bright-yellow fill. Every other
+     Pill tone uses text-{tone} (e.g. text-success) for badge/text usage, but
+     warning is the one exception that uses text-warning-foreground — so in
+     dark mode that dark-brown text rendered on dark cards everywhere
+     (Escalated pills, alert banners, etc.), reading as dull/near-invisible.
+     Override just the foreground here with a light gold that stays legible
+     on dark surfaces; --warning itself (the bright yellow fill) already
+     reads fine unchanged in both themes. */
+  --warning-foreground: #FFE49B;
+
+  /* Sidebar tokens are intentionally NOT overridden here — the sidebar is a
+     permanent dark anchor now (set once in :root) that doesn't change with
+     the light/dark theme toggle. */
+}
+
+/* Dark-mode tone-tint fix — bg-{tone}/N pastel tiles (KPI cards, Pill badges,
+   alert banners, etc.) are alpha blends against transparent, so the browser
+   composites them straight onto whatever's behind — in dark mode that's a
+   near-black surface, and low percentages (5–20%) barely nudge it off black,
+   reading as dull/muddy regardless of how vivid the underlying tone color is.
+   In light mode the same math works because the backdrop is near-white, so a
+   thin tint already reads as a clear pastel. Rather than touch every one of
+   the ~95 call sites, re-target these utilities in dark mode to blend against
+   the actual card surface at a stronger ratio, so the tone visibly pops the
+   way the light-theme pastel does. Unlayered (not @layer utilities), so this
+   wins the cascade over Tailwind's generated utility rules regardless of
+   source order. */
+.dark [class*="bg-primary/"],
+.dark [class*="bg-success/"],
+.dark [class*="bg-destructive/"],
+.dark [class*="bg-info/"] {
+  --tint-ratio: 22%;
+}
+.dark .bg-primary\/5, .dark .bg-success\/5, .dark .bg-destructive\/5 { --tint-ratio: 14%; }
+.dark .bg-primary\/10, .dark .bg-success\/10, .dark .bg-destructive\/10, .dark .bg-info\/10 { --tint-ratio: 24%; }
+.dark .bg-primary\/15, .dark .bg-success\/15, .dark .bg-destructive\/15 { --tint-ratio: 30%; }
+.dark .bg-primary\/20 { --tint-ratio: 34%; }
+
+.dark .bg-primary\/5, .dark .bg-primary\/10, .dark .bg-primary\/15, .dark .bg-primary\/20 {
+  background-color: color-mix(in oklab, var(--color-primary) var(--tint-ratio), var(--color-card));
+}
+.dark .bg-success\/5, .dark .bg-success\/10, .dark .bg-success\/15 {
+  background-color: color-mix(in oklab, var(--color-success) var(--tint-ratio), var(--color-card));
+}
+.dark .bg-destructive\/5, .dark .bg-destructive\/10, .dark .bg-destructive\/15 {
+  background-color: color-mix(in oklab, var(--color-destructive) var(--tint-ratio), var(--color-card));
+}
+.dark .bg-info\/10 {
+  background-color: color-mix(in oklab, var(--color-info) var(--tint-ratio), var(--color-card));
+}
+
+/* Warning is excluded from the color-mix approach above: its hue (~89°,
+   yellow) sits almost exactly opposite the dark theme's card hue (~260°,
+   blue-violet — a ~171° separation). color-mix blends the two chroma
+   vectors, and near-complementary hues cancel rather than combine — at the
+   24% ratio used for the other tones this produced oklch(0.35 0.02 98), i.e.
+   chroma collapsing to near-zero, rendering as flat brownish-grey (#3e3c30)
+   no matter how vivid --warning itself is. Fixed by defining each tier as a
+   directly-computed dark-gold oklch value at warning's own hue, so the
+   chroma survives instead of being fought by the backdrop. */
+.dark .bg-warning\/5 { background-color: oklch(0.28 0.05 89.2); }
+.dark .bg-warning\/10 { background-color: oklch(0.32 0.08 89.2); }
+.dark .bg-warning\/15 { background-color: oklch(0.36 0.1 89.2); }
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { font-size: 80%; }
+  html, body { height: 100%; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@utility text-balance { text-wrap: balance; }
+@utility scrollbar-thin {
+  &::-webkit-scrollbar { width: 8px; height: 8px; }
+  &::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-foreground) 18%, transparent); border-radius: 8px; }
+}
+
+/* A slow, gentle bob — used on Heera's launcher icon to feel alive without
+   the toy-like snap of Tailwind's built-in animate-bounce. */
+@keyframes heera-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@utility animate-heera-float {
+  animation: heera-float 2.4s ease-in-out infinite;
+}
+
+/* A diagonal light sweep across the login panel — the "shiny crystal" pass,
+   like light catching a faceted surface. The band's parent carries the
+   static rotation, so this animates a plain translateX and still reads as
+   a diagonal sweep once composited. */
+@keyframes shine-sweep {
+  0% { transform: translateX(-200%); }
+  100% { transform: translateX(600%); }
+}
+@utility animate-shine-sweep {
+  animation: shine-sweep 5s ease-in-out infinite;
+}
+
+/* Slow twinkle for the small crystal-facet highlights scattered on the panel. */
+@keyframes crystal-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.9); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+@utility animate-crystal-twinkle {
+  animation: crystal-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@utility animate-caret-blink {
+  animation: caret-blink 0.9s step-end infinite;
+}

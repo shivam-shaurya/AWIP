@@ -1,0 +1,51 @@
+# =============================================================================
+# kb-extract-rig - CORE runtime dependencies (CPU-only, Python 3.13)
+# =============================================================================
+# This file is the LAPTOP / CPU install: everything the DIGITAL happy-path needs
+# (native-PDF text + tables, XLSX, DOCX, the arithmetic tie-out) with NO GPU and
+# NO JVM. Versions are pinned to what is installed + verified coherent on the
+# build host (Python 3.13.14; `pip check` = "No broken requirements found").
+#
+#   pip install -r requirements.txt
+#
+# GPU OCR (scanned/handwriting) and the schedule parser are OPTIONAL EXTRAS - see
+# the bottom of this file. A laptop needs ONLY this file.
+# -----------------------------------------------------------------------------
+
+# --- PDF: text extraction + page rendering -----------------------------------
+pymupdf==1.27.1           # import name: fitz
+pdfplumber==0.11.9        # word geometry -> digital table reconstruction (robust_tables)
+
+# --- Office / structured ------------------------------------------------------
+openpyxl==3.1.5           # .xlsx/.xlsm read (exact) + the only xlsx WRITER (table_pdf output)
+python-docx==1.2.0        # .docx tables + paragraphs (digital, exact)
+
+# --- numeric / imaging (CPU) --------------------------------------------------
+numpy==2.4.2
+opencv-python==4.13.0.92  # cv2: render prep / deskew (CPU). Digital path degrades gracefully if absent.
+
+# --- helpers ------------------------------------------------------------------
+PyYAML==6.0.3             # optional config.yaml support (common.py degrades gracefully if absent)
+psutil==7.2.2             # peak-RSS in eval/run_benchmark.py `time` mode (optional there)
+rapidfuzz==3.10.1         # fuzzy match (reconcile, amount-word match). NOTE: NOT present on the build
+                          # host - common.py has a difflib fallback, so this is the one pin below that
+                          # is unverified-in-place; 3.10.1 ships cp313 wheels. Verify on first install.
+tqdm==4.67.3              # progress bars; common.py has a no-op fallback if absent
+
+# =============================================================================
+# OPTIONAL EXTRAS  (install ONLY if you need the feature - not needed on a laptop)
+# =============================================================================
+#   GPU OCR (scanned PDF / images / handwriting / Florence-2 VLM):
+#       pip install -r requirements-gpu.txt        # torch (pre-installed) + python-doctr + pytesseract
+#                                                   # + img2table + scikit-image + Pillow + xlrd
+#   Schedule parser (Primavera P6 .xer / MS Project .mpp) - needs a JVM (Java 8+):
+#       pip install -r requirements-schedule.txt   # mpxj (+ JPype1 transitively)
+#
+#   CPU-only optional FEATURES (pinned to build-host versions):
+#       pip install reportlab==4.4.10              # export_pdf.py  (readable-PDF export)
+#       pip install scipy==1.17.0                  # reconcile_tables.py global-assignment (lazy import)
+#       pip install xlrd==2.0.1                    # legacy .xls reading (also listed in requirements-gpu.txt)
+#
+#   Multi-engine COMPARISON harness (eval-only, opt-in - see eval/engines/):
+#       pip install docling                        # sovereign (IBM, MIT)
+#       # paddlepaddle / paddleocr are TEST-ONLY / NON-SOVEREIGN - comparison only, never shipped

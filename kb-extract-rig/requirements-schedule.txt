@@ -1,0 +1,15 @@
+# ---------------------------------------------------------------------------
+# Schedule parser (schedule_mpxj.py) - Primavera P6 + MS Project via MPXJ.
+# SERVER-ONLY: needs a JVM (Java 8+ on PATH / JAVA_HOME). The `mpxj` wheel bundles
+# the MPXJ jars and pulls in JPype1 (the Python<->JVM bridge) transitively.
+#
+# IMPORTANT: pin to the EXACT version installed on your server, then confirm the
+# API surface the parser uses with `python probe_schedule_mpxj.py <a real .xer>`
+# BEFORE relying on it (MPXJ method signatures vary across major versions).
+#   find your version:  python -c "import mpxj; print(mpxj.__version__)"
+# ---------------------------------------------------------------------------
+mpxj            # e.g. mpxj==13.x  <- replace with your server's version
+# JPype1        # transitive via mpxj; pin explicitly once known, e.g. JPype1==1.5.0
+
+# Pure-Python helpers (SchedulePercent / detect_format / sanitize_text / schedule_integrity /
+# schedule_normalize) need NO Java and are laptop-testable on the standard library alone.

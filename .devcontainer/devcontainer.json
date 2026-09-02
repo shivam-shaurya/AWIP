@@ -1,0 +1,25 @@
+{
+  "name": "AWIP (AI-HR)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" },
+    "ghcr.io/devcontainers-contrib/features/bun:1": {}
+  },
+  "forwardPorts": [8080, 5000, 8000],
+  "portsAttributes": {
+    "8080": { "label": "Frontend (Vite)" },
+    "5000": { "label": "server-core API" },
+    "8000": { "label": "server-ai API" }
+  },
+  "postCreateCommand": "bun install && (cd server-core && bun install) && (cd server-ai && python -m venv .venv && ./.venv/bin/pip install -r requirements.txt)",
+  "remoteEnv": {
+    "VITE_CORE_API_URL": "http://localhost:5000",
+    "VITE_AI_API_URL": "http://localhost:8000",
+    "ZAI_MODEL": "glm-4.7"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "Prisma.prisma"]
+    }
+  }
+}

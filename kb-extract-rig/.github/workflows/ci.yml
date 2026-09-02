@@ -1,0 +1,43 @@
+# =============================================================================
+# DORMANT CI - this workflow does NOTHING until the repo is put under git AND
+# pushed to GitHub. The repo is intentionally NOT under git today; creating this
+# file does not activate anything (GitHub only runs workflows for git-tracked,
+# pushed repositories). Do NOT `git init` just to enable it unless you mean to.
+#
+# It mirrors ./check.sh exactly: py_compile -> unit tests -> lint (ruff critical
+# fatal, full informational). CPU-only; installs just requirements.txt + ruff.
+# =============================================================================
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install core deps (CPU only)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff
+
+      - name: py_compile (all modules)
+        run: python -m compileall -f -q -x "(\.git|\.github|__pycache__)" .
+
+      - name: Unit tests
+        run: python tests/test_core.py
+
+      - name: Lint - critical (fatal)
+        run: python -m ruff check --select E9,F63,F7,F82 .
+
+      - name: Lint - full (informational, never fails the build)
+        run: python -m ruff check . || true

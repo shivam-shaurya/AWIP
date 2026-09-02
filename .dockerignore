@@ -1,0 +1,13 @@
+node_modules
+.output
+.nitro
+.tanstack
+dist
+server-core
+server-ai
+kb-extract-rig
+Heera chatbot
+logo
+.git
+.devcontainer
+*.md

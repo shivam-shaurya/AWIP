@@ -1,0 +1,10 @@
+# Context for server-ai/Dockerfile is the repo root — keep only what it needs.
+*
+!server-ai
+!kb-extract-rig
+server-ai/.venv
+server-ai/__pycache__
+server-ai/.env
+kb-extract-rig/samples
+kb-extract-rig/eval
+kb-extract-rig/tests

@@ -1,0 +1,55 @@
+[
+  {
+    "grid": null,
+    "id": "p1-e1",
+    "level": 1,
+    "page": 1,
+    "reading_order_index": 0,
+    "section_path": [
+      "SITE PREPARATION WORKS"
+    ],
+    "text": "SITE PREPARATION WORKS",
+    "type": "heading"
+  },
+  {
+    "grid": null,
+    "id": "p1-e2",
+    "level": null,
+    "page": 1,
+    "reading_order_index": 1,
+    "section_path": [
+      "SITE PREPARATION WORKS"
+    ],
+    "text": "The following bill of quantities covers the earthwork, plain cement concrete and reinforced concrete items.",
+    "type": "paragraph"
+  },
+  {
+    "grid": [
+      [
+        "Description",
+        "Amount"
+      ],
+      [
+        "Earthwork in excavation",
+        "100"
+      ],
+      [
+        "PCC 1:4:8 base course",
+        "200"
+      ],
+      [
+        "RCC M25 footing",
+        "300"
+      ]
+    ],
+    "id": "p1-e3",
+    "level": null,
+    "page": 1,
+    "reading_order_index": 2,
+    "section_path": [
+      "SITE PREPARATION WORKS"
+    ],
+    "text": null,
+    "type": "table"
+  }
+]

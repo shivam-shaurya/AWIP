@@ -1,0 +1,21 @@
+# Ruff config for kb-extract-rig - a SANE, low-noise ruleset.
+#
+# The codebase deliberately uses a dense one-liner style (`a; b`, `if c: return x`) for the
+# geometry/arithmetic core, so the "multiple statements on one line" rules are OFF (turning them
+# on would flag hundreds of intentional lines). check.sh / CI treat the CRITICAL subset
+# (E9, F63, F7, F82 - syntax errors + undefined names) as FATAL, and everything selected here as
+# INFORMATIONAL (reported, never fails the build).
+target-version = "py313"
+line-length = 120
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]   # pycodestyle, pyflakes, warnings, isort, bugbear, pyupgrade
+ignore = [
+    "E701",  # multiple statements on one line (colon)     - intentional dense style
+    "E702",  # multiple statements on one line (semicolon)  - intentional dense style
+    "E741",  # ambiguous variable name (l / I / O)          - short domain names are fine here
+]
+
+[lint.per-file-ignores]
+"tests/*.py"        = ["E501"]   # long assert messages / inline fixtures
+"eval/engines/*.py" = ["E501"]   # adapter docstrings
