@@ -48,6 +48,8 @@ services:
         sync: false
       - key: ZAI_MODEL
         value: glm-4.7-flash
+      - key: OPENROUTER_API_KEY
+        sync: false
 
   - name: awip-web
     type: web
